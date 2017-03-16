@@ -1,0 +1,18 @@
+# Project specific files
+/temp/
+/save/*.bin
+/save/*/*.bin
+/save/*.index
+/save/*/*.index
+
+# Java files
+/bin/
+*.class
+
+# IntelliJ specific files
+*.iml
+/.idea/workspace.xml
+/.idea/libraries
+
+# macOS specific files
+.DS_Store
