@@ -26,7 +26,7 @@ public class Labo1 {
 	}
 	
 	// CONFIGURATION
-	public static final String  START_URL 			= "http://minecraft-fr.gamepedia.com/Minecraft_Wiki"; // "http://iict.heig-vd.ch";
+	public static final String  START_URL 			= "http://minecraft.gamepedia.com/Minecraft_Wiki"; // "http://iict.heig-vd.ch";
 	public static final boolean DEBUG				= true;
 	private static final Mode	mode				= Mode.CRAWL;
 	private static final String	indexSaveFileName	= "minecraft-wiki.index"; // "iict.bin";
@@ -62,8 +62,8 @@ public class Labo1 {
 		config.setIncludeHttpsPages(true);
 		config.setPolitenessDelay(250); 			//minimum 250ms for tests
 		config.setUserAgentString("crawler4j/WEM/2017");
-		config.setMaxDepthOfCrawling(8);			//max 2-3 levels for tests on large website
-		config.setMaxPagesToFetch(5000);			//-1 for unlimited number of pages
+		config.setMaxDepthOfCrawling(/*8*/3);			//max 2-3 levels for tests on large website
+		config.setMaxPagesToFetch(/*5000*/50);			//-1 for unlimited number of pages
 		
 		RobotstxtConfig robotsConfig = new RobotstxtConfig(); //by default
 		
