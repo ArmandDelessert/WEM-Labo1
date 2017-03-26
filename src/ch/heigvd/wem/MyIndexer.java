@@ -81,7 +81,7 @@ public class MyIndexer implements Indexer {
 
     @Override
     public void finalizeIndexation() {
-        // Maintenant que tous les documents ont étés traités, construire l'index inversé contenant, pour chaque mot, les ids des documentsles contenant ainsi que leur fréquences.
+        // Maintenant que tous les documents ont étés traités, construire l'index inversé contenant, pour chaque mot, les ID des documents les contenant ainsi que leur fréquence.
         index.createInvertedIndex();
     }
 

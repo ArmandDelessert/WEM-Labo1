@@ -43,20 +43,6 @@ public class MyIndex extends Index {
                 else {
                     invertedIndex.put(word, new LinkedList<>(Collections.singletonList(entry.getKey())));
                 }
-                /*
-                if (invertedIndex.containsKey(word)) {
-                    try {
-                        invertedIndex.get(word).add(entry.getKey()); //TODO: Plantage à cette ligne ?
-                    }
-                    catch (UnsupportedOperationException e) {
-                        System.out.println("Erreur UnsupportedOperationException.");
-                    }
-                    Collections.sort(invertedIndex.get(word));
-                }
-                else {
-                    invertedIndex.put(word, Collections.singletonList(entry.getKey()));
-                }
-                */
             }
         }
     }
