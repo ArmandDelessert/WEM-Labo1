@@ -24,24 +24,24 @@ public class Labo1 {
 		CRAWL,
 		RESTORE
 	}
-	
+
 	// CONFIGURATION
 	public static final String  START_URL 			= "http://minecraft.gamepedia.com/Minecraft_Wiki"; // "http://iict.heig-vd.ch";
 	public static final boolean DEBUG				= true;
 	private static final Mode	mode				= Mode.CRAWL;
 	private static final String	indexSaveFileName	= "minecraft-wiki.index"; // "iict.bin";
-	
+
 	public static void main(String[] args) {
 
 		Index index = null;
-		
+
 		switch(mode) {
 		case CRAWL:
 			//we crawl and save the index to disk
 			index = crawl();
 			saveIndex(indexSaveFileName, index);
 			break;
-			
+
 		case RESTORE:
 			//we load the index from disk
 			index = loadIndex(indexSaveFileName);
@@ -49,9 +49,9 @@ public class Labo1 {
 		}
 
 		//TODO recherche
-		
+
 	}
-	
+
 	private static Index crawl() {
 		// CONFIGURATION
 		CrawlConfig config = new CrawlConfig();
@@ -63,20 +63,20 @@ public class Labo1 {
 		config.setPolitenessDelay(250); 			//minimum 250ms for tests
 		config.setUserAgentString("crawler4j/WEM/2017");
 		config.setMaxDepthOfCrawling(/*8*/3);			//max 2-3 levels for tests on large website
-		config.setMaxPagesToFetch(/*5000*/50);			//-1 for unlimited number of pages
-		
+		config.setMaxPagesToFetch(/*5000*/500);			//-1 for unlimited number of pages
+
 		RobotstxtConfig robotsConfig = new RobotstxtConfig(); //by default
-		
+
 		PageFetcher pageFetcher = new PageFetcher(config);
 		RobotstxtServer robotstxtServer = new RobotstxtServer(robotsConfig, pageFetcher);
-        
+
 		//we create the indexer and the indexerQueue
-		Indexer indexer = new MyIndexer(); //TODO vous instancierez ici votre implémentation de l'indexer
+		Indexer indexer = new MyIndexer();
 		WebPageIndexerQueue queue = new WebPageIndexerQueue(indexer);
 		queue.start();
 		//we set the indexerQueue reference to all the crawler threads
 		WebPageCrawler.setIndexerQueue(queue);
-		
+
 		try {
 			CrawlController controller = new CrawlController(config, pageFetcher, robotstxtServer);
 			controller.addSeed(START_URL);
@@ -84,16 +84,16 @@ public class Labo1 {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		queue.setAllDone(); //we notify the indexerQueue that it will not receive more data
 		try {
 			queue.join(); //we wait for the indexerQueue to finish
 		} catch (InterruptedException e) { /* NOTHING TO DO */ }
-		
+
 		//we return the created index
 		return indexer.getIndex();
 	}
-	
+
 	private static void saveIndex(String filename, Index index) {
 		try {
 			File outputFile = new File("save", filename);
@@ -105,7 +105,7 @@ public class Labo1 {
 			System.exit(1);
 		}
 	}
-	
+
 	private static Index loadIndex(String filename) {
 		try {
 			File inputFile = new File("save", filename);
@@ -119,8 +119,8 @@ public class Labo1 {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		
+
 		return null;
 	}
-	
+
 }

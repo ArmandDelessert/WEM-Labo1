@@ -34,17 +34,29 @@ public class MyIndex extends Index {
      * Indexe inversé : Pour chaque mot, une liste des documents dans lesquels le mot apparaît est liée.
      */
     public void createInvertedIndex() {
-        long docID = 0;
         for (Map.Entry<Long, List<String>> entry : index.entrySet()) {
-            docID = entry.getKey();
             for (String word : entry.getValue()) {
+                List<Long> docIDs = invertedIndex.get(word);
+                if (docIDs != null) {
+                    docIDs.add(entry.getKey());
+                }
+                else {
+                    invertedIndex.put(word, new LinkedList<>(Collections.singletonList(entry.getKey())));
+                }
+                /*
                 if (invertedIndex.containsKey(word)) {
-                    invertedIndex.get(word).add(docID);
+                    try {
+                        invertedIndex.get(word).add(entry.getKey()); //TODO: Plantage à cette ligne ?
+                    }
+                    catch (UnsupportedOperationException e) {
+                        System.out.println("Erreur UnsupportedOperationException.");
+                    }
                     Collections.sort(invertedIndex.get(word));
                 }
                 else {
-                    invertedIndex.put(word, Collections.singletonList(docID));
+                    invertedIndex.put(word, Collections.singletonList(entry.getKey()));
                 }
+                */
             }
         }
     }
@@ -54,6 +66,7 @@ public class MyIndex extends Index {
     }
 
     private void addToIndex(long docID, List<String> words) {
+        Collections.sort(words);
         index.put(docID, words);
     }
 

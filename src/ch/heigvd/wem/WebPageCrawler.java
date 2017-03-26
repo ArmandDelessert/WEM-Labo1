@@ -22,7 +22,7 @@ public class WebPageCrawler extends WebCrawler {
     public boolean shouldVisit(Page referringPage, WebURL url) {
 
         // Filtrage des URL externes au site web
-        if (!(url.getSubDomain() + '.' + url.getDomain()).equals("minecraft-fr.gamepedia.com"))
+        if (!(url.getSubDomain() + '.' + url.getDomain()).equals("minecraft.gamepedia.com"))
             return false;
 
         // Filtrage des pages "Discussion"

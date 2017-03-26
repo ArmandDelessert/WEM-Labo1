@@ -6,12 +6,11 @@ import ch.heigvd.wem.interfaces.Index;
 import ch.heigvd.wem.interfaces.Indexer;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Armand Delessert on 13.03.2017.
@@ -29,12 +28,8 @@ public class MyIndexer implements Indexer {
 
         // Lecture du fichier contenant les stop words
         try {
-            BufferedReader reader = Files.newBufferedReader(Paths.get("C:\\Users\\ArmandDelessert\\Documents\\IdeaProjects\\WEM-Labo1\\common_words"));
-
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                stopWords.add(line);
-            }
+            File stopWordsFile = new File("common_words");
+            stopWords = Files.readAllLines(stopWordsFile.toPath());
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("The file containing stopwords was not found.");
@@ -44,21 +39,8 @@ public class MyIndexer implements Indexer {
 
     @Override
     public void index(Metadata metadata, String content) {
-//        index.addMetadata(metadata.getDocID(), metadata); // DEBUG
-
         // Séparation du contenu en tokens
-        List<String> tokens = Arrays.asList(content.split(" "));
-
-        // Filtrage des tokens
-        for (int i = 0; i < tokens.size(); ++i) {
-            tokens.get(i).toLowerCase();
-            // Suppression de toute la ponctuation, à l'exception des apostrophes suivies d'une lettre
-            tokens.get(i).replaceAll("(?!'[a-zA-Z0-9])\\p{Punct}", ""); // Regex : (?!'[a-zA-Z0-9])\p{P}
-
-            if (stopWords.contains(tokens.get(i))) {
-                tokens.remove(i); // TODO: Provoque parfois des UnsupportedOperationException. Ne supporte pas la concurrence ?
-            }
-        }
+        List<String> tokens = tokenize(content);
 
         // Ajout de la page à l'index
         index.addDocument(metadata, tokens);
@@ -66,10 +48,38 @@ public class MyIndexer implements Indexer {
         counter++;
     }
 
+    /**
+     * Séparation du texte du document en mots-clés et suppression de la ponctuation.
+     *
+     * @param content
+     * @return
+     */
+    private List<String> tokenize(String content) {
+        // Séparation du contenu en tokens
+        List<String> tokens = new ArrayList<>(Arrays.asList(content.split("[ \\t\\r\\n]+"))); // "new ArrayList()" car "Arrays.asList()" retourne une liste non-modifiable.
+
+        // Filtrage des tokens
+        for (int i = 0; i < tokens.size(); ++i) {
+            tokens.set(i, tokens.get(i).toLowerCase());
+            // Suppression de toute la ponctuation, à l'exception des apostrophes suivies d'une lettre
+            tokens.set(i, tokens.get(i).replaceAll("(?!'[a-zA-Z0-9])\\p{Punct}", "")); // Regex : (?!'[a-zA-Z0-9])\p{P} // TODO: Supprimer les apostrophes devant les mots
+
+            if (stopWords.contains(tokens.get(i))) {
+                tokens.remove(i--);
+            }
+        }
+
+        // Suppression des doublons
+        tokens = new ArrayList<>(new LinkedHashSet<>(tokens));
+
+        Collections.sort(tokens);
+
+        return tokens;
+    }
+
     @Override
     public void finalizeIndexation() {
         // Maintenant que tous les documents ont étés traités, construire l'index inversé contenant, pour chaque mot, les ids des documentsles contenant ainsi que leur fréquences.
-
         index.createInvertedIndex();
     }
 

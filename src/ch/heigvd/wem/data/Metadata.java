@@ -12,10 +12,10 @@ public class Metadata implements Serializable {
 
 	private static final long serialVersionUID = -8430586236974769791L;
 
-	private static long nextdocId = 0;
+	private static long nextDocID = 0;
 
     // unique identifier of the document
-    private long docid;
+    private long docID;
     // the web page URL
     private WebURL url;
     // the web page title
@@ -24,7 +24,7 @@ public class Metadata implements Serializable {
     private Set<WebURL> links;
 
     public Metadata() {
-    	this.docid = nextdocId++;
+    	this.docID = nextDocID++;
 	}
     
     /**
@@ -34,7 +34,7 @@ public class Metadata implements Serializable {
      * @param links Its links
      */
     public Metadata(WebURL url, String title, Set<WebURL> links){
-        this.docid = nextdocId++;
+        this.docID = nextDocID++;
         this.url   = url;
         this.title = title;
         this.links = links;
@@ -43,7 +43,7 @@ public class Metadata implements Serializable {
     /**
      * @return The unique web page identifier, it is auto-generated
      */
-    public long getDocID(){ return docid; }
+    public long getDocID(){ return docID; }
     
     /**
      * @return The web page's title
