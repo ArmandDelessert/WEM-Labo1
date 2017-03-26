@@ -62,7 +62,9 @@ public class MyIndexer implements Indexer {
         for (int i = 0; i < tokens.size(); ++i) {
             tokens.set(i, tokens.get(i).toLowerCase());
             // Suppression de toute la ponctuation, à l'exception des apostrophes précédées et suivies d'une lettre.
-            tokens.set(i, tokens.get(i).replaceAll("[^\\p{L}\\p{N}']|((?<=^)'|'(?=$))", ""));
+            // Cette partie supprime toute la ponctuation sauf les apostrophes : [^\p{L}\p{N}']
+            // Cette partie supprime les apostrophes en début et en fin de mot : ((\B'\b)|(\b'\B))
+            tokens.set(i, tokens.get(i).replaceAll("[^\\p{L}\\p{N}']|((\\B'\\b)|(\\b'\\B))", ""));
 
             if (stopWords.contains(tokens.get(i))) {
                 tokens.remove(i--);
