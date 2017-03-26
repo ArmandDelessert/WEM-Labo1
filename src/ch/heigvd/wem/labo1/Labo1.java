@@ -62,8 +62,8 @@ public class Labo1 {
 		config.setIncludeHttpsPages(true);
 		config.setPolitenessDelay(250); 			//minimum 250ms for tests
 		config.setUserAgentString("crawler4j/WEM/2017");
-		config.setMaxDepthOfCrawling(/*8*/3);			//max 2-3 levels for tests on large website
-		config.setMaxPagesToFetch(/*5000*/500);			//-1 for unlimited number of pages
+		config.setMaxDepthOfCrawling(/*8*/8);			//max 2-3 levels for tests on large website
+		config.setMaxPagesToFetch(/*5000*/5);			//-1 for unlimited number of pages
 
 		RobotstxtConfig robotsConfig = new RobotstxtConfig(); //by default
 
