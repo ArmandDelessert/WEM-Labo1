@@ -5,11 +5,9 @@ import ch.heigvd.wem.data.MyIndex;
 import ch.heigvd.wem.interfaces.Index;
 import ch.heigvd.wem.interfaces.Indexer;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 /**
