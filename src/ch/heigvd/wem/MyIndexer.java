@@ -38,10 +38,13 @@ public class MyIndexer implements Indexer {
     @Override
     public void index(Metadata metadata, String content) {
         // Séparation du contenu en tokens
-        List<String> tokens = tokenize(content);
+        List<String> words = tokenize(content);
+
+        // Comptage et suppression des doublons
+        Map<String, Integer> wordsWithTheirOccurrences = calculateWordsOccurrences(words);
 
         // Ajout de la page à l'index
-        index.addDocument(metadata, tokens);
+        index.addDocument(metadata, wordsWithTheirOccurrences);
 
         counter++;
     }
@@ -62,7 +65,8 @@ public class MyIndexer implements Indexer {
             // Suppression de toute la ponctuation, à l'exception des apostrophes précédées et suivies d'une lettre.
             // Cette partie supprime toute la ponctuation sauf les apostrophes : [^\p{L}\p{N}']
             // Cette partie supprime les apostrophes en début et en fin de mot : ((\B'\b)|(\b'\B))
-            tokens.set(i, tokens.get(i).replaceAll("[^\\p{L}\\p{N}']|((\\B'\\b)|(\\b'\\B))", ""));
+//            tokens.set(i, tokens.get(i).replaceAll("[^\\p{L}\\p{N}']|((\\B'\\b)|(\\b'\\B))", ""));
+            tokens.set(i, tokens.get(i).replaceAll("[^\\p{L}']|((\\B'\\b)|(\\b'\\B))", "")); // Suppression des chiffres en plus
 
             if (stopWords.contains(tokens.get(i))) {
                 tokens.remove(i--);
@@ -70,11 +74,31 @@ public class MyIndexer implements Indexer {
         }
 
         // Suppression des doublons
-        tokens = new ArrayList<>(new LinkedHashSet<>(tokens));
+//        tokens = new ArrayList<>(new LinkedHashSet<>(tokens));
 
-        Collections.sort(tokens);
+//        Collections.sort(tokens);
 
         return tokens;
+    }
+
+    /**
+     * Comptage et suppression des doublons.
+     * @param words
+     * @return
+     */
+    private Map<String, Integer> calculateWordsOccurrences(List<String> words) {
+        Map<String, Integer> wordsWithTheirOccurrence = new TreeMap<>();
+
+        // Tri de la liste de mots
+        words.sort(null);
+
+        // Calcul de la fréquence des mots et stokage dans une map
+        for (String word : words) {
+            int occurrence = wordsWithTheirOccurrence.getOrDefault(word, 0);
+            wordsWithTheirOccurrence.put(word, ++occurrence);
+        }
+
+        return wordsWithTheirOccurrence;
     }
 
     @Override
