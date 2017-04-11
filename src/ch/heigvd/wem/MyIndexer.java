@@ -16,11 +16,13 @@ import java.util.*;
 public class MyIndexer implements Indexer {
 
     private int counter;
+    private boolean isIndexFinalized;
     private MyIndex index;
     private List<String> stopWords;
 
     public MyIndexer() {
         counter = 0;
+        isIndexFinalized = false;
         index = new MyIndex();
         stopWords = new LinkedList<>();
 
@@ -105,10 +107,14 @@ public class MyIndexer implements Indexer {
     public void finalizeIndexation() {
         // Maintenant que tous les documents ont étés traités, construire l'index inversé contenant, pour chaque mot, les ID des documents les contenant ainsi que leur fréquence.
         index.createInvertedIndex();
+        isIndexFinalized = true;
     }
 
     @Override
     public Index getIndex() {
-        return index;
+        if (isIndexFinalized)
+            return index;
+        else
+            return null;
     }
 }
