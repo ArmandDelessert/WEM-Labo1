@@ -107,6 +107,7 @@ public class MyIndexer implements Indexer {
     public void finalizeIndexation() {
         // Maintenant que tous les documents ont étés traités, construire l'index inversé contenant, pour chaque mot, les ID des documents les contenant ainsi que leur fréquence.
         index.createInvertedIndex();
+        index.calcWeights();
         isIndexFinalized = true;
     }
 

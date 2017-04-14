@@ -6,7 +6,7 @@ import ch.heigvd.wem.interfaces.Retriever;
 import java.util.Map;
 
 /**
- * Created by ArmandDelessert on 06.04.2017.
+ * Created by Armand Delessert on 06.04.2017.
  */
 public class MyRetriever extends Retriever {
     public MyRetriever(Index index, WeightingType weightingType) {
